@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "mods": {
+      ".read": "auth != null",
+      ".write": false
+    },
+    "messages": {
+      ".indexOn": "ts"
+    },
+    ".read": "auth != null",
+    ".write": "auth != null",
+    ".indexOn": "mods"
+  }
+}

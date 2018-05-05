@@ -1,0 +1,155 @@
+<!-- bDiscuss, TIBD Discussion Service --> 
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>bDiscuss</title>
+    <script src="https://unpkg.com/tippy.js@2.2.2/dist/tippy.all.min.js"></script>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css">
+    <link rel="stylesheet" href="semantic/dist/semantic.min.css">
+    <script src="semantic/dist/semantic.min.js"></script>
+    <script type="text/javascript" src="js/linkify.min.js"></script>
+    <script type="text/javascript" src="js/linkify-jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" id="style">
+    <link rel="icon" href="css/bdiscuss_XUf_icon.ico">
+</head>
+
+<body>
+    <div class="ui container">
+        <div id="messages" class="fixed"></div>
+        <div class="ui fluid action input">
+            <input type="text" id="messageInput" placeholder="Message">
+            <div class="ui black button" id="sendMessage">Send</div>
+        </div>
+    </div>
+    <div class="ui container">
+        <div class="ui horizontal list">
+            <div class="item" id="Profile">
+                <a class="ui button">
+                    <i class="user icon"></i>
+                </a>
+            </div>
+            <div class="item" id="Settings">
+                <div class="ui button">
+                    <i class="cog icon"></i>
+                </div>
+                <div class="ui special large popup">
+                    <div class="container" id="userSettings">
+                        <div class="ui title">Settings</div>
+                        <div class="ui top attached wide tabular secondary pointing menu">
+                            <a class="active item" data-tab="account">Account</a>
+                            <a class="item" data-tab="settings">Settings</a>
+                            <a class="item" data-tab="third">Third</a>
+                        </div>
+                        <div class="ui bottom attached active tab segment" data-tab="account">
+                            <div class="ui items">
+                                <div class="item">
+                                    <div class="ui tiny image">
+
+                                    </div>
+                                    <div class="content">
+                                        <div class="ui header">
+
+                                        </div>
+                                        <div id="postCount">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="ui bottom attached tab segment" data-tab="settings">
+                            <div class="ui form">
+                                <div class="inline field">
+                                    <div class="ui slider checkbox">
+                                        <input type="checkbox" tabindex="0" id="toggletheme" class="hidden">
+                                        <label>Toggle Dark Mode</label>
+                                    </div>
+                                    <label></label>
+                                </div>
+                                <div class="inline field">
+                                    <div class="ui slider checkbox">
+                                        <input type="checkbox" tabindex="0" id="highlight" class="hidden">
+                                        <label>Play Sound on Highlight</label>
+                                    </div>
+                                    <label></label>
+                                </div>
+                                <div class="ui divider"></div>
+                                <button class="ui green labled icon button" onclick="saveUserSettings();">Save
+                                    <i class="check icon"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="ui bottom attached tab segment" data-tab="third">
+                            Third
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div id="userSignedIn" id="SignOut">
+                    <a class="ui button">
+                        <i class="sign out alternative icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="item" id="Sign In">
+                <div class="control" id="userSignedOut">
+                    <div id="firebaseui-auth-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Profile Picture
+        </div>
+        <div class="image content">
+            <div class="ui medium image">
+
+            </div>
+            <div class="description">
+                <div class="ui header">We've auto-chosen a profile image for you.</div>
+                <p>We've grabbed the following image from the
+                    <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+                <p>Is it okay to use this photo?</p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                Nope
+            </div>
+            <div class="ui positive right labeled icon button">
+                Yep, that's me
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div> -->
+        <div class="ui large modal">
+            <i class="close icon"></i>
+            <div class="ui form">
+                <div class="field">
+                    <label>Username</label>
+                    <input type="text" placeholder="...">
+                </div>
+            </div>
+            <button class="ui green labled icon button" onclick="nameUser();">Ok
+                <i class="check icon"></i>
+            </button>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/script.js"></script>
+</body>
+
+</html>
