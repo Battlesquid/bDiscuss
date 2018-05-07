@@ -73,10 +73,12 @@ body {
 a {
     transition-duration: 0.5s;
     color: rgb(83, 90, 128);
+    cursor: pointer;
 }
 
 a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 input#messageInput {

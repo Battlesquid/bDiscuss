@@ -13,6 +13,7 @@ function f() {
     var postCounter = 0;
     var notify = new Audio('notify.mp3');
 
+
     //this code disables the console in production mode, so that our debug messages don't affect user experience. It's a really clever script, and I'm really proud of it. - _iPhoenix_
     productionMode && (() => {
         x = console, window.console = {}, void Object.keys(x).forEach(function (o) {
@@ -20,7 +21,6 @@ function f() {
         })
     })();
 
-    //save yourself an unnecessary, one-use global variable.
     firebase.initializeApp({
         apiKey: "AIzaSyCI8N2f4HGdG7KVtjoea-g4eCkxvQhLOQw",
         authDomain: "tibd-discuss-beta.firebaseapp.com",
@@ -35,23 +35,6 @@ function f() {
         database = firebase.database();
     // var messaging = firebase.messaging();
     //config the firebase app
-    uiConfig = {
-        signInFlow: 'popup',
-        'callbacks': {
-            'signInSuccess': function () {
-                location.reload();
-            }
-        },
-        signInOptions: [
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ],
-        tosUrl: '<tos_link>'
-    };
-
-    //initialize firebaseui
-    ui = new firebaseui.auth.AuthUI(auth);
-    ui.disableAutoSignIn();
-
     var userSignedIn = function (user) {
         console.log("User signed in");
         document.getElementById("userSignedOut").style.display = 'none';
@@ -63,10 +46,8 @@ function f() {
         console.log("User signed out");
         document.getElementById("userSignedIn").style.display = 'none';
         document.getElementById("userSignedOut").style.display = 'block';
-        ui.start('#firebaseui-auth-container', uiConfig);
     }
 
-    //listen for auth changes
     auth.onAuthStateChanged(function (user) {
         user ? userSignedIn(user) : userSignedOut();
         if (user) {
@@ -130,23 +111,6 @@ function f() {
         }
     }
     //sendMessage is a button, can also use an onclick event
-    document.getElementById('sendMessage').addEventListener('click', send);
-    document.getElementById('userSignedIn').addEventListener('click', function () {
-        auth.signOut();
-        location.reload();
-    });
-    document.getElementById("Profile").addEventListener('click', function () {
-        $('#Profile')
-            .popup({
-                inline: true,
-                hoverable: true,
-                position: 'bottom left',
-                delay: {
-                    show: 300,
-                    hide: 800
-                }
-            });
-    });
     messageRef.once('value', function () {
         objDiv = document.getElementById("messages");
         objDiv.scrollTop = objDiv.scrollHeight;
@@ -176,7 +140,7 @@ function f() {
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
     }
 
-    var deleteMsg = function (id) {
+    this.deleteMsg = function (id) {
         dID = parseInt(id);
         database.ref('global/deleteID').transaction(function (currentData) {
             globalID = dID;
@@ -201,13 +165,13 @@ function f() {
 
     var initUser = function () {
         $('.tiny.image').append("<img src='" + auth.currentUser.photoURL + "'>");
-        $('.ui.header').append(auth.currentUser.displayName);
         $('.ui.button').popup({
             inline: true,
             on: 'click'
         });
         $('.menu .item').tab();
         $('.ui.checkbox').checkbox();
+
         userRef = database.ref('userState/' + userName);
         postRef = database.ref('userState/' + userName + '/posts');
         msgRef.transaction(function (currentData) {
@@ -248,11 +212,11 @@ function f() {
             isBanned = snapshot.val().isBanned;
             messageRef.orderByChild('ts').limitToLast(30).on('child_added', function (data) {
                 var val = data.val();
-                val.id = data.key; 
+                val.id = data.key;
                 if (counter > 29) {
                     $('#' + (counter - 30)).remove();
                 }
-            
+
 
                 currentTime = new Date(val.ts).toLocaleDateString();
                 if (new Date(lastMessage).toLocaleDateString() != currentTime) {
@@ -268,7 +232,7 @@ function f() {
 
                 database.ref("/mods/").once('value').then(x => $('#user' + val.id).prepend((1 + x.val().indexOf(val.un)) ? "<span class='mod'>MOD</span>" : ""));
                 if (isMod) {
-                    $('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='deleteMsg(\"" + val.id + "\")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
+                    $('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='j.deleteMsg(" + val.id + ")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
                 }
                 if (cleanse(val.msg).includes(auth.currentUser.displayName.substring(0, 3))) {
                     $('#' + (val.id)).css({
@@ -277,7 +241,6 @@ function f() {
                     if (document.getElementById('highlight').checked == true) {
                         notify.play();
                     }
-
                 }
                 $('.msg').linkify();
                 tippy('.admin');
