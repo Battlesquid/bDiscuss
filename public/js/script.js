@@ -9,7 +9,7 @@ function f() {
         tippyText = "";
     var dID, globalID, delMsg, msgID;
     var lastMessage;
-    var productionMode = false;
+    var productionMode = true;
     var postCounter = 0;
     var notify = new Audio('notify.mp3');
 
