@@ -172,7 +172,7 @@ function f() {
         return n.innerHTML;
     }
 
-    var initUser = function() {
+    function initUser() {
         $('.tiny.image').append("<img src='" + auth.currentUser.photoURL + "'>");
         $('.ui.button').popup({
             inline: true,
