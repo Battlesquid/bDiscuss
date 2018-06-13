@@ -9,15 +9,14 @@ function f() {
         tippyText = "";
     var dID, globalID, delMsg, msgID;
     var lastMessage;
-    var productionMode = true;
+    var productionMode = false;
     var postCounter = 0;
     var notify = new Audio('notify.mp3');
 
-
     //this code disables the console in production mode, so that our debug messages don't affect user experience. It's a really clever script, and I'm really proud of it. - _iPhoenix_
     productionMode && (() => {
-        x = console, window.console = {}, void Object.keys(x).forEach(function (o) {
-            window.console[o] = (() => { })
+        x = console, window.console = {}, void Object.keys(x).forEach(function(o) {
+            window.console[o] = (() => {})
         })
     })();
 
@@ -35,20 +34,20 @@ function f() {
         database = firebase.database();
     // var messaging = firebase.messaging();
     //config the firebase app
-    var userSignedIn = function (user) {
+    var userSignedIn = function(user) {
         console.log("User signed in");
         document.getElementById("userSignedOut").style.display = 'none';
         document.getElementById("userSignedIn").style.display = 'block';
         userFlag = true;
     }
 
-    var userSignedOut = function () {
+    var userSignedOut = function() {
         console.log("User signed out");
         document.getElementById("userSignedIn").style.display = 'none';
         document.getElementById("userSignedOut").style.display = 'block';
     }
 
-    auth.onAuthStateChanged(function (user) {
+    auth.onAuthStateChanged(function(user) {
         user ? userSignedIn(user) : userSignedOut();
         if (user) {
             console.log(user.displayName);
@@ -66,7 +65,7 @@ function f() {
     // }).catch(function (err) {
     //     console.log('Unable to get permission to notify.', err);
     // });
-    var openSettings = function () {
+    var openSettings = function() {
         $('.setting').modal({
             fadeDuration: 100
         });
@@ -74,50 +73,60 @@ function f() {
 
     var messageRef = database.ref('messages');
     var msgRef = database.ref('global/total');
+    
+    var onlineRef = database.ref('.info/connected');
+    var presenceRef = database.ref('online/' + auth.currentUser.displayName);
+    
+    onlineRef.on('value', function(snapshot) {
+        if (snapshot.val()) {
+            presenceRef.onDisconnect().remove();
+            presenceRef.set(true);
+        }
+    });
 
     var messageInput = document.getElementById('messageInput');
-    this.send = function () {
-        if (!isBanned) {
-            var message = messageInput.value;
-            if (message != "") {
-                msgRef.transaction(function (currentData) {
-                    console.log("msgID Transaction:" + msgID); // you don't need the .toString() because JS is loosely typed and converts it to a string implicitly.
+    this.send = function() {
+            if (!isBanned) {
+                var message = messageInput.value;
+                if (message != "") {
+                    msgRef.transaction(function(currentData) {
+                        console.log("msgID Transaction:" + msgID); // you don't need the .toString() because JS is loosely typed and converts it to a string implicitly.
 
+                        return currentData + 1;
+                    }, function(error, committed, snapshot) {
+                        if (error) {
+                            console.log('Transaction failed abnormally!', error);
+                        } else if (!committed) {
+                            console.log('Aborted the transaction (because ' + userName + ' already exists).');
+                        } // why was there an empty else statement here?
+                    }, false);
+                    msgRef.on('value', function(data) {
+                        msgID = data.val();
+                        console.log("msgRef value updated:" + msgID);
+                    });
+                    database.ref('messages/' + msgID).set({
+                        'un': auth.currentUser.displayName,
+                        'msg': message,
+                        'ts': firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+                messageInput.value = '';
+                postRef.transaction(function(currentData) {
+                    postCounter = currentData + 1;
+                    document.getElementById("count").innerHTML = postCounter.toString();
                     return currentData + 1;
-                }, function (error, committed, snapshot) {
-                    if (error) {
-                        console.log('Transaction failed abnormally!', error);
-                    } else if (!committed) {
-                        console.log('Aborted the transaction (because ' + userName + ' already exists).');
-                    } // why was there an empty else statement here?
-                }, false);
-                msgRef.on('value', function (data) {
-                    msgID = data.val();
-                    console.log("msgRef value updated:" + msgID);
                 });
-                database.ref('messages/' + msgID).set({
-                    'un': auth.currentUser.displayName,
-                    'msg': message,
-                    'ts': firebase.database.ServerValue.TIMESTAMP
-                });
-            }
-            messageInput.value = '';
-            postRef.transaction(function (currentData) {
-                postCounter = currentData + 1;
-                document.getElementById("count").innerHTML = postCounter.toString();
-                return currentData + 1;
-            });
 
+            }
         }
-    }
-    //sendMessage is a button, can also use an onclick event
-    messageRef.once('value', function () {
+        //sendMessage is a button, can also use an onclick event
+    messageRef.once('value', function() {
         objDiv = document.getElementById("messages");
         objDiv.scrollTop = objDiv.scrollHeight;
     });
 
-    $(function () {
-        $("#messageInput").keypress(function (e) {
+    $(function() {
+        $("#messageInput").keypress(function(e) {
             if (e.which == 13) {
                 send();
             }
@@ -140,18 +149,18 @@ function f() {
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
     }
 
-    this.deleteMsg = function (id) {
+    this.deleteMsg = function(id) {
         dID = parseInt(id);
-        database.ref('global/deleteID').transaction(function (currentData) {
+        database.ref('global/deleteID').transaction(function(currentData) {
             globalID = dID;
             console.log("dID Value: " + globalID);
             return dID;
-        }, function (error, committed, snapshot) {
+        }, function(error, committed, snapshot) {
             if (error) {
                 console.log('Transaction failed abnormally!', error);
             } else if (!committed) {
                 console.log('globalID not updated');
-            } else { }
+            } else {}
         }, false);
         database.ref('messages/' + dID).remove();
     }
@@ -163,7 +172,7 @@ function f() {
         return n.innerHTML;
     }
 
-    var initUser = function () {
+    var initUser = function() {
         $('.tiny.image').append("<img src='" + auth.currentUser.photoURL + "'>");
         $('.ui.button').popup({
             inline: true,
@@ -174,10 +183,10 @@ function f() {
 
         userRef = database.ref('userState/' + userName);
         postRef = database.ref('userState/' + userName + '/posts');
-        msgRef.transaction(function (currentData) {
+        msgRef.transaction(function(currentData) {
             msgID = currentData;
             return currentData;
-        }, function (error, committed, snapshot) {
+        }, function(error, committed, snapshot) {
             if (error) {
                 console.log('Transaction failed abnormally!', error);
             } else if (!committed) {
@@ -187,7 +196,7 @@ function f() {
             }
         });
         //firebase.database().ref('/mods/').on('')
-        userRef.transaction(function (currentData) {
+        userRef.transaction(function(currentData) {
             if (currentData === null) {
                 return {
                     isBanned: false,
@@ -197,7 +206,7 @@ function f() {
                 console.log('User ' + userName + ' already exists.');
                 return;
             }
-        }, function (error, committed, snapshot) {
+        }, function(error, committed, snapshot) {
             if (error) {
                 console.log('Transaction failed abnormally!', error);
             } else if (!committed) {
@@ -210,13 +219,12 @@ function f() {
             $('#postCount').append("<strong>Posts: </strong><span id='count'>" + postCounter + "</span>");
             database.ref("/mods/").once('value').then(x => isMod = (-1 != (x.val().indexOf(auth.currentUser.displayName))));
             isBanned = snapshot.val().isBanned;
-            messageRef.orderByChild('ts').limitToLast(30).on('child_added', function (data) {
+            messageRef.orderByChild('ts').limitToLast(30).on('child_added', function(data) {
                 var val = data.val();
                 val.id = data.key;
                 if (counter > 29) {
                     $('#' + (counter - 30)).remove();
                 }
-
 
                 currentTime = new Date(val.ts).toLocaleDateString();
                 if (new Date(lastMessage).toLocaleDateString() != currentTime) {
@@ -251,8 +259,8 @@ function f() {
                 }
                 lastMessage = val.ts;
             });
-            messageRef.on('child_removed', function (data) {
-                database.ref('global/deleteID').transaction(function (currentData) {
+            messageRef.on('child_removed', function(data) {
+                database.ref('global/deleteID').transaction(function(currentData) {
                     globalID = currentData;
                     console.log("dID Value: " + globalID);
                     return dID;
