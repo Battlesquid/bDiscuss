@@ -271,6 +271,7 @@ function f() {
     }
 }
 var j = new f();
+var auth = firebase.auth();
 
 function send() {
     j.send();
