@@ -182,24 +182,31 @@
                 </a>
             </div>
             <div class="pusher">
-                <div class="ui basic segment">
-                    <h3 class="ui header"></h3>
-                    <div id="messages" class="fixed"></div>
-                    <div class="ui fluid action input">
-                        <input type="text" id="messageInput" placeholder="Message">
-                        <div class="ui black button" id="sendMessage" onclick="send();">Send</div>
+                <div class="ui segment">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <h3 class="ui header"></h3>
+                            <div id="messages" class="fixed"></div>
+                            <div class="ui fluid action input">
+                                <input type="text" id="messageInput" placeholder="Message">
+                                <div class="ui black button" id="sendMessage" onclick="send();">Send</div>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <h2 class="ui title">Users</h2>
+                            <div class="ui divider"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        $('.context.example .ui.sidebar').sidebar({
-            context: $('.context.example .bottom.segment')
-        })
-            .sidebar('attach events', '.context.example .menu .item');
-    </script>
-    <script type="text/javascript" src="js/script.js"></script>
+        <script>
+            $('.context.example .ui.sidebar').sidebar({
+                    context: $('.context.example .bottom.segment')
+                })
+                .sidebar('attach events', '.context.example .menu .item');
+        </script>
+        <script type="text/javascript" src="js/script.js"></script>
 </body>
 
 </html>
