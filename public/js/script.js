@@ -1,6 +1,6 @@
 function f() {
 	var counter = 1,
-		userName = " ",
+		userName = "",
 		isMod = "";
 	var objDiv, scroll = true,
 		tippyText = "";
@@ -30,17 +30,16 @@ function f() {
 	var db = firebase.database();
 	var msg = db.ref('messages'),
 		total = db.ref('global/total');
-	console.re.log(userName);
+	var myConnectionsRef, lastOnlineRef;
+	// console.re.log(userName);
 
 	var userSignedIn = function(user) {
 		$('#userSignedOut').hide();
 		$('#userSignedIn').show();
 		users = db.ref('userState/' + user.displayName);
 		posts = db.ref('userState/' + user.displayName + '/posts');
-		var myConnectionsRef = firebase.database().ref('users/' + user.displayName + '/connections');
-
-		// stores the timestamp of my last disconnect (the last time I was seen online)
-		var lastOnlineRef = firebase.database().ref('users' + user.displayName + '/lastOnline');
+		myConnectionsRef = db.ref('users/' + user.displayName + "/");
+		parentConnections = db.ref('users/');
 	};
 
 	var userSignedOut = function() {
@@ -53,7 +52,7 @@ function f() {
 		if (user) {
 			userName = auth.currentUser.displayName;
 			initUser();
-			console.re.log(userName);
+			// console.re.log(userName);
 		}
 	});
 
@@ -68,17 +67,13 @@ function f() {
 	connectedRef.on('value', function(snap) {
 		if (snap.val() === true) {
 			// We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
-			var con = myConnectionsRef.push();
 
 			// When I disconnect, remove this device
-			con.onDisconnect().remove();
+			myConnectionsRef.onDisconnect().remove();
 
 			// Add this device to my connections list
 			// this value could contain info about the device or a timestamp too
-			con.set(true);
-
-			// When I disconnect, update the last time I was seen online
-			lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+			myConnectionsRef.set(true);
 		}
 	});
 
@@ -106,17 +101,30 @@ function f() {
 	}
 
 	function initUser() {
+		parentConnections.on('child_added', function(val) {
+			$('#users').append("<div id='" + val.key + "'>" + val.key + "</div>");
+		});
+		parentConnections.on('child_removed', function(val) {
+			// console.re.log(val.val() ? "true" : "false" );
+			$('#' + val.key).remove();
+		});
+		// parentConnections.on('child_changed', function(val) {
+		// 	console.re.log(val.val());
+		// 	val.val() ? $('#users').append("<div id='" + val.key + "'></div>") : $('#' + val.key).remove();
+		// 	// $('#users').append(val.val() ? val.key + "<br>" : "");
+		// });
 		users.transaction(function(d) {
 			if (d === null) {
 				return {
-					isBanned: false,
+					isBanned: "false",
 					posts: 0
 				};
 			}
 		}, function(err, commit, val) {
-			console.re.log(userName + "'s data: ", val.val());
+			// console.re.log(userName + "'s data: ", val.val());
 			pC = val.val().posts;
 			isBanned = val.val().isBanned;
+			// console.re.log(isBanned === "false" ? "Not Banned" : "Banned");
 			// $('#postCount').append("<strong>Posts: </strong><span id='count'>" + pC + "</span>");
 			db.ref("/mods/").once('value').then(x => isMod = (-1 != (x.val().indexOf(auth.currentUser.displayName))));
 			msg.orderByChild('ts').limitToLast(30).on('child_added', function(d) {
@@ -125,33 +133,33 @@ function f() {
 				if (counter > 29) {
 					$('#' + (counter - 30)).remove();
 				}
-	
+
 				ctime = new Date(val.ts).toLocaleDateString();
 				if (new Date(lastMessage).toLocaleDateString() != ctime) {
 					$('#messages').append("<h3 class='date-wrap'><span class='date-span'>" + new Date(val.ts).toLocaleDateString() + "</span></h3>");
 				}
-	
+
 				if (!(val.msg.startsWith("/me"))) {
 					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
 				}
-	
+
 				else {
 					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span><strong id='user" + val.id + "' class='user" + val.id + "  action' title='" + val.un + "'>" + val.un + "</strong> " + "<span class='action'>" + cleanse(val.msg.substring(4))) + "</span>";
 				}
-	
+
 				db.ref("/mods/").once('value').then(x => $('#user' + val.id).prepend((1 + x.val().indexOf(val.un)) ? "<span class='mod'>MOD</span>" : ""));
-	
+
 				if (isMod) {
 					$('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='j.deleteMsg(" + val.id + ")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
 				}
-	
+
 				if (cleanse(val.msg).includes(auth.currentUser.displayName.substring(0, 3))) {
 					$('#' + (val.id)).css({
 						"background-color": "#ddd"
 					});
 					notify.play();
 				}
-	
+
 				$('.msg').linkify();
 				tippy('.admin');
 				tippy(".user" + val.id);
@@ -161,7 +169,7 @@ function f() {
 				}
 				lastMessage = val.ts;
 			});
-			console.re.log(isBanned);
+
 		});
 		var lastMessage;
 		total.transaction(function(d) {
@@ -194,6 +202,9 @@ function f() {
 			});
 		}
 	};
+	this.deleteMsg = function() {
+
+	}
 }
 
 var j = new f();
