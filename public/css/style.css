@@ -113,6 +113,7 @@ strong {
 .action {
     color: rgb(46, 46, 46);
     font-style: italic;
+    padding-left: 4px;
 }
 
 .admin {
