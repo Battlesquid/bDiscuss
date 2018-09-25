@@ -119,6 +119,48 @@ function f() {
 			isBanned = val.val().isBanned;
 			// $('#postCount').append("<strong>Posts: </strong><span id='count'>" + pC + "</span>");
 			db.ref("/mods/").once('value').then(x => isMod = (-1 != (x.val().indexOf(auth.currentUser.displayName))));
+			msg.orderByChild('ts').limitToLast(30).on('child_added', function(d) {
+				var val = d.val();
+				val.id = d.key;
+				if (counter > 29) {
+					$('#' + (counter - 30)).remove();
+				}
+	
+				ctime = new Date(val.ts).toLocaleDateString();
+				if (new Date(lastMessage).toLocaleDateString() != ctime) {
+					$('#messages').append("<h3 class='date-wrap'><span class='date-span'>" + new Date(val.ts).toLocaleDateString() + "</span></h3>");
+				}
+	
+				if (!(val.msg.startsWith("/me"))) {
+					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
+				}
+	
+				else {
+					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span><strong id='user" + val.id + "' class='user" + val.id + "  action' title='" + val.un + "'>" + val.un + "</strong> " + "<span class='action'>" + cleanse(val.msg.substring(4))) + "</span>";
+				}
+	
+				db.ref("/mods/").once('value').then(x => $('#user' + val.id).prepend((1 + x.val().indexOf(val.un)) ? "<span class='mod'>MOD</span>" : ""));
+	
+				if (isMod) {
+					$('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='j.deleteMsg(" + val.id + ")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
+				}
+	
+				if (cleanse(val.msg).includes(auth.currentUser.displayName.substring(0, 3))) {
+					$('#' + (val.id)).css({
+						"background-color": "#ddd"
+					});
+					notify.play();
+				}
+	
+				$('.msg').linkify();
+				tippy('.admin');
+				tippy(".user" + val.id);
+				if (scroll) {
+					objDiv = document.getElementById("messages");
+					objDiv.scrollTop = objDiv.scrollHeight;
+				}
+				lastMessage = val.ts;
+			});
 			console.re.log(isBanned);
 		});
 		var lastMessage;
@@ -126,49 +168,6 @@ function f() {
 			return d;
 		}, function(err, commit, val) {
 			msgID = val.val();
-		});
-
-		msg.orderByChild('ts').limitToLast(30).on('child_added', function(d) {
-			var val = d.val();
-			val.id = d.key;
-			if (counter > 29) {
-				$('#' + (counter - 30)).remove();
-			}
-
-			ctime = new Date(val.ts).toLocaleDateString();
-			if (new Date(lastMessage).toLocaleDateString() != ctime) {
-				$('#messages').append("<h3 class='date-wrap'><span class='date-span'>" + new Date(val.ts).toLocaleDateString() + "</span></h3>");
-			}
-
-			if (!(val.msg.startsWith("/me"))) {
-				$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
-			}
-
-			else {
-				$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span><strong id='user" + val.id + "' class='user" + val.id + "  action' title='" + val.un + "'>" + val.un + "</strong> " + "<span class='action'>" + cleanse(val.msg.substring(4))) + "</span>";
-			}
-
-			db.ref("/mods/").once('value').then(x => $('#user' + val.id).prepend((1 + x.val().indexOf(val.un)) ? "<span class='mod'>MOD</span>" : ""));
-
-			if (isMod) {
-				$('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='j.deleteMsg(" + val.id + ")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
-			}
-
-			if (cleanse(val.msg).includes(auth.currentUser.displayName.substring(0, 3))) {
-				$('#' + (val.id)).css({
-					"background-color": "#ddd"
-				});
-				notify.play();
-			}
-
-			$('.msg').linkify();
-			tippy('.admin');
-			tippy(".user" + val.id);
-			if (scroll) {
-				objDiv = document.getElementById("messages");
-				objDiv.scrollTop = objDiv.scrollHeight;
-			}
-			lastMessage = val.ts;
 		});
 	}
 	var messageInput = document.getElementById('messageInput');
