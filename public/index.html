@@ -30,7 +30,7 @@
 	<div class="section">
 		<div class="columns">
 			<div class="column is-1">
-				<a id="userSignedOut" class="button is-large" onclick="var provider=new firebase.auth.GoogleAuthProvider();firebase.auth().signInWithPopup(provider);">
+				<a id="userSignedOut" class="button is-large" onclick="var provider=new firebase.auth.GoogleAuthProvider();firebase.auth().signInWithPopup(provider).then(function(){location.reload();});">
 					<span class="icon is-large">
 							<i class="fab fa-google"></i>
 						</span>
@@ -61,6 +61,7 @@
 			<div class="column is-3">
 				<div clas="content">
 					<h1 class="heading">Online</h1>
+					<div id="users"></div>
 				</div>
 			</div>
 		</div>
