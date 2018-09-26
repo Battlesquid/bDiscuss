@@ -102,11 +102,13 @@ function f() {
 
 	function initUser() {
 		parentConnections.on('child_added', function(val) {
-			$('#users').append("<div id='" + val.key + "'>" + val.key + "</div>");
+			var r = /\s/gi;
+			$('#users').append("<div id='" + val.key.replace(r, "") + "'>" + val.key + "</div>");
 		});
 		parentConnections.on('child_removed', function(val) {
 			// console.re.log(val.val() ? "true" : "false" );
-			$('#' + val.key).remove();
+			var r = /\s/gi;
+			$('#' + val.key.replace(r, '')).remove();
 		});
 		// parentConnections.on('child_changed', function(val) {
 		// 	console.re.log(val.val());
