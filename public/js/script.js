@@ -52,7 +52,6 @@ function f() {
 		if (user) {
 			userName = auth.currentUser.displayName;
 			initUser();
-			// console.re.log(userName);
 		}
 	});
 
@@ -66,15 +65,15 @@ function f() {
 	var connectedRef = firebase.database().ref('.info/connected');
 	connectedRef.on('value', function(snap) {
 		if (snap.val() === true) {
-			// We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
-
-			// When I disconnect, remove this device
 			myConnectionsRef.onDisconnect().remove();
-
-			// Add this device to my connections list
-			// this value could contain info about the device or a timestamp too
 			myConnectionsRef.set(true);
 		}
+	});
+
+	document.getElementById('userSignedIn').addEventListener('click', function() {
+		myConnectionsRef.remove();
+		auth.signOut();
+		location.reload();
 	});
 
 	$(function() {
@@ -100,13 +99,14 @@ function f() {
 		return n.innerHTML;
 	}
 
+
 	function initUser() {
+
 		parentConnections.on('child_added', function(val) {
 			var r = /\s/gi;
 			$('#users').append("<div id='" + val.key.replace(r, "") + "'>" + val.key + "</div>");
 		});
 		parentConnections.on('child_removed', function(val) {
-			// console.re.log(val.val() ? "true" : "false" );
 			var r = /\s/gi;
 			$('#' + val.key.replace(r, '')).remove();
 		});
@@ -115,6 +115,8 @@ function f() {
 		// 	val.val() ? $('#users').append("<div id='" + val.key + "'></div>") : $('#' + val.key).remove();
 		// 	// $('#users').append(val.val() ? val.key + "<br>" : "");
 		// });
+
+
 		users.transaction(function(d) {
 			if (d === null) {
 				return {
@@ -129,12 +131,13 @@ function f() {
 			// console.re.log(isBanned === "false" ? "Not Banned" : "Banned");
 			// $('#postCount').append("<strong>Posts: </strong><span id='count'>" + pC + "</span>");
 			db.ref("/mods/").once('value').then(x => isMod = (-1 != (x.val().indexOf(auth.currentUser.displayName))));
+
+
 			msg.orderByChild('ts').limitToLast(30).on('child_added', function(d) {
+				console.re.log(db.ref(d.key) !== null ? true : false);
 				var val = d.val();
 				val.id = d.key;
-				if (counter > 29) {
-					$('#' + (counter - 30)).remove();
-				}
+				console.re.log('event fired:' + d.key);
 
 				ctime = new Date(val.ts).toLocaleDateString();
 				if (new Date(lastMessage).toLocaleDateString() != ctime) {
@@ -152,7 +155,7 @@ function f() {
 				db.ref("/mods/").once('value').then(x => $('#user' + val.id).prepend((1 + x.val().indexOf(val.un)) ? "<span class='mod'>MOD</span>" : ""));
 
 				if (isMod) {
-					$('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='j.deleteMsg(" + val.id + ")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
+					$('#' + (val.id)).append("<a class='admin remove' title='Delete' id=" + val.id + " onclick='deleteMsg(" + val.id + ")'><i class='fas fa-times'></i></a><a class='admin hammer' id=" + val.id + " title='Ban' onclick='dropHammer(" + val.un + ");'><i class='fas fa-gavel'></i></a>");
 				}
 
 				if (cleanse(val.msg).includes(auth.currentUser.displayName.substring(0, 3))) {
@@ -170,8 +173,14 @@ function f() {
 					objDiv.scrollTop = objDiv.scrollHeight;
 				}
 				lastMessage = val.ts;
-			});
 
+
+// 				msg.on('child_removed', function(val) {
+// 					var el = document.getElementById(val.key);
+// 					el.parentNode.removeChild(el);
+// 					console.re.log(val.key);
+// 				});
+			});
 		});
 		var lastMessage;
 		total.transaction(function(d) {
@@ -189,11 +198,11 @@ function f() {
 					return d + 1;
 				}, function(err, commit, val) {
 					msgID = val.val();
-				});
-				db.ref('messages/' + msgID).set({
-					'un': auth.currentUser.displayName,
-					'msg': message,
-					'ts': firebase.database.ServerValue.TIMESTAMP
+					db.ref('messages/' + msgID).set({
+						'un': auth.currentUser.displayName,
+						'msg': message,
+						'ts': firebase.database.ServerValue.TIMESTAMP
+					});
 				});
 			}
 			messageInput.value = '';
@@ -204,9 +213,11 @@ function f() {
 			});
 		}
 	};
-	this.deleteMsg = function() {
+// 	this.deleteMsg = function(id) {
+// 		console.re.log(id);
+// 		db.ref('messages/' + id).remove();
+// 	};
 
-	}
 }
 
 var j = new f();
@@ -215,3 +226,7 @@ var auth = firebase.auth();
 function send() {
 	j.send();
 }
+
+// function deleteMsg(id) {
+// 	j.deleteMsg(id)
+// }
