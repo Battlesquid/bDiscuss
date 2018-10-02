@@ -79,6 +79,17 @@ function f() {
 	document.getElementById('theme').addEventListener('click', function() {
 		tflg = !tflg;
 		document.getElementById('style').href = (tflg ? 'css/dark.css' : 'css/style.css');
+		var el = document.getElementsByClassName('button');
+		for (var i = 0; i < el.length; i++) {
+			if (tflg) {
+				el[i].classList.add('is-dark');
+			}
+			else {
+				el[i].classList.remove('is-dark');
+			}
+
+		}
+
 	});
 
 	$(function() {
@@ -109,7 +120,7 @@ function f() {
 
 		parentConnections.on('child_added', function(val) {
 			var r = /\s/gi;
-			$('#users').append("<div id='" + val.key.replace(r, "") + "'>" + val.key + "</div>");
+			$('.users').append("<div id='" + val.key.replace(r, "") + "'>" + val.key + "</div>");
 		});
 		parentConnections.on('child_removed', function(val) {
 			var r = /\s/gi;
