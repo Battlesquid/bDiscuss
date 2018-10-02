@@ -8,9 +8,12 @@ function f() {
 	var productionMode = false;
 	var pC = 0,
 		isBanned;
-	var th = document.cookie.match(/[=]\w+[;]/gi)[0];
-	var theme = th.substring(1, th.length - 1);
-	var tflg = (theme === 'dark' ? true : false);
+	if (document.cookie) {
+		var th = document.cookie.match(/[=]\w+[;]/gi)[0];
+		var theme = th.substring(1, th.length - 1);
+		var tflg = (theme === 'dark' ? true : false);
+	}
+
 	var notify = new Audio('notify.mp3');
 
 	//this code disables the console in production mode, so that our debug messages don't affect user experience. It's a really clever script, and I'm really proud of it. - _iPhoenix_
