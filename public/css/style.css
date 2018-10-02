@@ -1,163 +1,182 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu:400);
 @media screen and (min-width: 400px) {
-    .fixed {
-        height: 300px;
-        overflow: auto;
-        border: 1px solid #444;
-    }
-    .date-span {
-        background-color: #fff;
-        padding: 0 10px;
-    }
-    .date-wrap {
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid #000;
-        line-height: 0.1em;
-        margin: 10px 0 20px;
-        background-color: #444;
-    }
-    .msg {
-        background-color: #fafafa;
-        padding: 5px 15px;
-        font-size: 9pt;
-        font-family: sans-serif;
-        position: relative;
-        word-wrap: break-word;
-    }
-    .msg:hover {
-        background-color: #f5f5f5;
-    }
-    .action {
-        color: rgb(46, 46, 46);
-        font-style: italic;
-    }
-    .msginfo {
-        position: absolute;
-        bottom: 0;
-        right: 2px;
-        font-size: 5pt;
-        color: #acacac;
-        transition-duration: 0.3s;
-        text-align: center;
-    }
-    .msginfo:hover {
-        color: #444;
-        cursor: default;
-    }
-    .admin {
-        color: #9c9c9c;
-        cursor: pointer;
-        font-size: 9pt;
-        float: right;
-    }
-    .tabview {
-        float: right;
-    }
-    .limited {
-        width: 50%;
-    }
-    input#messageInput {
-        width: 100%;
-        outline: none;
-    }
-    #messages {
-        background-color: #fafafa
-    }
+	.fixed {
+		height: 300px;
+		overflow: auto;
+		border: 1px solid #444;
+	}
+	.date-span {
+		background-color: #fff;
+		padding: 0 10px;
+	}
+	.date-wrap {
+		width: 100%;
+		text-align: center;
+		border-bottom: 1px solid #000;
+		line-height: 0.1em;
+		margin: 10px 0 20px;
+		background-color: #444;
+		width: 500px;
+	}
+	.msg {
+		background-color: #fafafa;
+		padding: 5px 15px;
+		font-size: 9pt;
+		font-family: sans-serif;
+		position: relative;
+		word-wrap: break-word;
+	}
+	.msg:hover {
+		background-color: #f5f5f5;
+	}
+	.action {
+		color: rgb(46, 46, 46);
+		font-style: italic;
+	}
+	.msginfo {
+		position: absolute;
+		bottom: 0;
+		right: 2px;
+		font-size: 5pt;
+		color: #acacac;
+		transition-duration: 0.3s;
+		text-align: center;
+	}
+	.msginfo:hover {
+		color: #444;
+		cursor: default;
+	}
+	.admin {
+		color: #9c9c9c;
+		cursor: pointer;
+		font-size: 9pt;
+		float: right;
+	}
+	.tabview {
+		float: right;
+	}
+	.limited {
+		width: 50%;
+	}
+	input#messageInput {
+		width: 100%;
+		outline: none;
+	}
+	#messages {
+		background-color: #fafafa
+	}
 }
 
 body {
-    font-family: 'Ubuntu', sans-serif;
+	font-family: 'Ubuntu', sans-serif;
 }
 
 a {
-    transition-duration: 0.5s;
-    color: rgb(83, 90, 128);
-    cursor: pointer;
+	transition-duration: 0.5s;
+	color: rgb(83, 90, 128);
+	cursor: pointer;
 }
 
 a:hover {
-    text-decoration: underline;
-    cursor: pointer;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 input#messageInput {
-    width: 100%;
-    outline: none;
+	width: 100%;
+	outline: none;
 }
 
 strong {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .fixed {
-    height: 420px;
-    overflow: auto;
-    border: 1px solid #444;
-    border-bottom: none;
+	height: 420px;
+	overflow: auto;
+	border: 1px solid #444;
+	border-bottom: none;
 }
 
 .msg {
-    background-color: #fafafa;
-    padding: 5px 15px;
-    font-size: 10pt;
-    font-family: 'Ubuntu', sans-serif;
-    position: relative;
-    word-wrap: break-word;
+	background-color: #fafafa;
+	padding: 5px 15px;
+	font-size: 10pt;
+	font-family: 'Ubuntu', sans-serif;
+	position: relative;
+	word-wrap: break-word;
 }
 
 .msg:hover {
-    background-color: #f5f5f5;
+	background-color: #f5f5f5;
 }
 
 .action {
-    color: rgb(46, 46, 46);
-    font-style: italic;
-    padding-left: 4px;
+	color: rgb(46, 46, 46);
+	font-style: italic;
+	padding-left: 4px;
 }
 
 .admin {
-    color: #303030;
-    cursor: pointer;
-    font-size: 11pt;
-    float: right;
-    margin-right: 5px;
+	color: #303030;
+	cursor: pointer;
+	font-size: 11pt;
+	float: right;
+	margin-right: 5px;
 }
 
 .mod {
-    border: 1px solid #3f3f3f;
-    padding: 3px 8px;
-    margin-right: 3px;
-    font-style: normal;
+	border: 1px solid #3f3f3f;
+	padding: 3px 8px;
+	margin-right: 3px;
+	font-style: normal;
 }
 
 .tabview {
-    float: right;
+	float: right;
 }
 
 .limited {
-    width: 50%;
+	width: 50%;
 }
 
 .timestamp {
-    color: #535353;
-    border: 1px solid #3f3f3f;
-    padding: 3px 8px;
+	display: inline-block;
+	padding: 3px 8px;
+	text-align: center;
+	color: #535353;
+	border: 1px solid #3f3f3f;
+	width: 100px;
 }
 
 .date-span {
-    background-color: #fafafa;
-    padding: 0 10px;
+	background-color: #fafafa;
+	padding: 0 10px;
 }
 
 .date-wrap {
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid #000;
-    line-height: 0.1em;
-    margin: 10px 0 20px;
+	width: 100%;
+	text-align: center;
+	border-bottom: 1px solid #000;
+	line-height: 0.1em;
+	margin: 10px 0 20px;
 }
 
 #messages {
-    background-color: #fafafa
+	background-color: #fafafa
+}
+
+#prnt input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+#toggle {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
 }
