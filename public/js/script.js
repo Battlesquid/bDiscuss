@@ -8,6 +8,7 @@ function f() {
 	var productionMode = false;
 	var pC = 0,
 		isBanned;
+	var tflg = false;
 	var notify = new Audio('notify.mp3');
 
 	//this code disables the console in production mode, so that our debug messages don't affect user experience. It's a really clever script, and I'm really proud of it. - _iPhoenix_
@@ -75,6 +76,10 @@ function f() {
 		auth.signOut();
 		location.reload();
 	});
+	document.getElementById('theme').addEventListener('click', function() {
+		tflg = !tflg;
+		document.getElementById('style').href = (tflg ? 'css/dark.css' : 'css/style.css');
+	});
 
 	$(function() {
 		$("#messageInput").keypress(function(e) {
@@ -125,11 +130,8 @@ function f() {
 				};
 			}
 		}, function(err, commit, val) {
-			// console.re.log(userName + "'s data: ", val.val());
 			pC = val.val().posts;
 			isBanned = val.val().isBanned;
-			// console.re.log(isBanned === "false" ? "Not Banned" : "Banned");
-			// $('#postCount').append("<strong>Posts: </strong><span id='count'>" + pC + "</span>");
 			db.ref("/mods/").once('value').then(x => isMod = (-1 != (x.val().indexOf(auth.currentUser.displayName))));
 
 
@@ -145,11 +147,11 @@ function f() {
 				}
 
 				if (!(val.msg.startsWith("/me"))) {
-					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
+					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<div class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</div> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
 				}
 
 				else {
-					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<span class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</span><strong id='user" + val.id + "' class='user" + val.id + "  action' title='" + val.un + "'>" + val.un + "</strong> " + "<span class='action'>" + cleanse(val.msg.substring(4))) + "</span>";
+					$('#messages').append("<div class='msg' id=" + val.id + "><div class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</div><strong id='user" + val.id + "' class='user" + val.id + "  action' title='" + val.un + "'>" + val.un + "</strong><span class='action'>" + cleanse(val.msg.substring(4))) + "</span>";
 				}
 
 				db.ref("/mods/").once('value').then(x => $('#user' + val.id).prepend((1 + x.val().indexOf(val.un)) ? "<span class='mod'>MOD</span>" : ""));
@@ -175,11 +177,11 @@ function f() {
 				lastMessage = val.ts;
 
 
-// 				msg.on('child_removed', function(val) {
-// 					var el = document.getElementById(val.key);
-// 					el.parentNode.removeChild(el);
-// 					console.re.log(val.key);
-// 				});
+				msg.on('child_removed', function(val) {
+					var el = document.getElementById(val.key);
+					el.parentNode.removeChild(el);
+					console.re.log(val.key);
+				});
 			});
 		});
 		var lastMessage;
@@ -213,10 +215,10 @@ function f() {
 			});
 		}
 	};
-// 	this.deleteMsg = function(id) {
-// 		console.re.log(id);
-// 		db.ref('messages/' + id).remove();
-// 	};
+	this.deleteMsg = function(id) {
+		console.re.log(id);
+		db.ref('messages/' + id).remove();
+	};
 
 }
 
@@ -227,6 +229,6 @@ function send() {
 	j.send();
 }
 
-// function deleteMsg(id) {
-// 	j.deleteMsg(id)
-// }
+function deleteMsg(id) {
+	j.deleteMsg(id)
+}
