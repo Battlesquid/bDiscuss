@@ -159,7 +159,7 @@ function f() {
 		users.transaction(function(d) {
 			if (d === null) {
 				return {
-					isBanned: "false",
+					isBanned: false,
 					posts: 0
 				};
 			}
