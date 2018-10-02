@@ -8,10 +8,16 @@ function f() {
 	var productionMode = false;
 	var pC = 0,
 		isBanned;
-	if (document.cookie) {
-		var th = document.cookie.match(/[=]\w+[;]/gi)[0];
-		var theme = th.substring(1, th.length - 1);
-		var tflg = (theme === 'dark' ? true : false);
+	var th, theme, tflg;
+	// if (!document.cookie) {
+	// 	document.cookie = 'theme=light;';
+	// }
+	if (document.cookie.match(/[=]\w+[;]/gi)) {
+		th = document.cookie.match(/[=]\w+[;]/gi)[0];
+		theme = th.substring(1, th.length - 1);
+		tflg = (theme === 'dark' ? true : false);
+	} else {
+		document.cookie = 'theme=light;';
 	}
 
 	var notify = new Audio('notify.mp3');
