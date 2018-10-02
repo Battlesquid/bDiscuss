@@ -19,10 +19,10 @@ html {
 		border-bottom: 1px solid #000;
 		line-height: 0.1em;
 		margin: 10px 0 20px;
-		background-color: #444;
+		background-color: #222;
 	}
 	.msg {
-		background-color: #fafafa;
+		background-color: #222;
 		padding: 5px 15px;
 		font-size: 9pt;
 		font-family: sans-serif;
@@ -88,9 +88,11 @@ a:hover {
 	background-color: #333;
 	color: #ddd;
 }
+
 #ot {
 	color: whitesmoke;
 }
+
 input#messageInput {
 	width: 100%;
 	outline: none;
@@ -128,6 +130,7 @@ strong {
 .action {
 	color: rgb(117, 117, 117);
 	font-style: italic;
+	padding-left: 4px;
 }
 
 .admin {
@@ -163,7 +166,7 @@ strong {
 }
 
 .date-span {
-	background-color: #444;
+	background-color: #222;
 	padding: 0 10px;
 	color: #adadad;
 }
@@ -171,7 +174,7 @@ strong {
 .date-wrap {
 	width: 100%;
 	text-align: center;
-	border-bottom: 1px solid #b7b7b7;
+	border-bottom: 1px solid #222;
 	line-height: 0.1em;
 	margin: 10px 0 20px;
 }
@@ -179,6 +182,11 @@ strong {
 .users {
 	color: #888;
 }
+
 .icon {
 	color: #ddd;
+}
+
+.mention {
+	background-color: #333;
 }
