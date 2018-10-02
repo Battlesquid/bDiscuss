@@ -1,167 +1,171 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu:400);
+html {
+	background-color: #333;
+}
+
 @media screen and (min-width: 400px) {
-    .fixed {
-        height: 300px;
-        overflow: auto;
-        border: 1px solid #444;
-    }
-    .date-span {
-        background-color: #fff;
-        padding: 0 10px;
-    }
-    .date-wrap {
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid #000;
-        line-height: 0.1em;
-        margin: 10px 0 20px;
-        background-color: #444;
-    }
-    .msg {
-        background-color: #fafafa;
-        padding: 5px 15px;
-        font-size: 9pt;
-        font-family: sans-serif;
-        position: relative;
-        word-wrap: break-word;
-    }
-    .msg:hover {
-        background-color: #f5f5f5;
-    }
-    .action {
-        color: rgb(46, 46, 46);
-        font-style: italic;
-    }
-    .msginfo {
-        position: absolute;
-        bottom: 0;
-        right: 2px;
-        font-size: 5pt;
-        color: #acacac;
-        transition-duration: 0.3s;
-        text-align: center;
-    }
-    .msginfo:hover {
-        color: #444;
-        cursor: default;
-    }
-    .admin {
-        color: #9c9c9c;
-        cursor: pointer;
-        font-size: 9pt;
-        float: right;
-    }
-    .tabview {
-        float: right;
-    }
-    .limited {
-        width: 50%;
-    }
-    input#messageInput {
-        width: 100%;
-        outline: none;
-    }
+	.fixed {
+		height: 300px;
+		overflow: auto;
+		border: 1px solid #444;
+	}
+	.date-span {
+		background-color: #fff;
+		padding: 0 10px;
+	}
+	.date-wrap {
+		width: 100%;
+		text-align: center;
+		border-bottom: 1px solid #000;
+		line-height: 0.1em;
+		margin: 10px 0 20px;
+		background-color: #444;
+	}
+	.msg {
+		background-color: #fafafa;
+		padding: 5px 15px;
+		font-size: 9pt;
+		font-family: sans-serif;
+		position: relative;
+		word-wrap: break-word;
+	}
+	.msg:hover {
+		background-color: #f5f5f5;
+	}
+	.action {
+		color: rgb(46, 46, 46);
+		font-style: italic;
+	}
+	.msginfo {
+		position: absolute;
+		bottom: 0;
+		right: 2px;
+		font-size: 5pt;
+		color: #acacac;
+		transition-duration: 0.3s;
+		text-align: center;
+	}
+	.msginfo:hover {
+		color: #444;
+		cursor: default;
+	}
+	.admin {
+		color: #9c9c9c;
+		cursor: pointer;
+		font-size: 9pt;
+		float: right;
+	}
+	.tabview {
+		float: right;
+	}
+	.limited {
+		width: 50%;
+	}
+	input#messageInput {
+		width: 100%;
+		outline: none;
+	}
 }
 
 body {
-    font-family: 'Ubuntu', sans-serif;
+	font-family: 'Ubuntu', sans-serif;
 }
 
 a {
-    transition-duration: 0.5s;
-    color: rgb(83, 90, 128);
+	transition-duration: 0.5s;
+	color: rgb(83, 90, 128);
 }
 
 a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 #messages {
-    background-color: #444444;
+	background-color: #444444;
 }
 
 #messageInput {
-    background-color: #444;
-    color: #a7a7a7;
+	background-color: #444;
+	color: #a7a7a7;
 }
 
 input#messageInput {
-    width: 100%;
-    outline: none;
+	width: 100%;
+	outline: none;
 }
 
 strong {
-    cursor: pointer;
-    color: #888888;
+	cursor: pointer;
+	color: #888888;
 }
 
 .fixed {
-    height: 420px;
-    overflow: auto;
-    border: 1px solid #444;
-    border-bottom: none;
+	height: 420px;
+	overflow: auto;
+	border: 1px solid #444;
+	border-bottom: none;
 }
 
 .msg {
-    background-color: #fafafa;
-    padding: 5px 15px;
-    font-size: 10pt;
-    font-family: 'Ubuntu', sans-serif;
-    position: relative;
-    word-wrap: break-word;
-    background-color: #444;
-    color: #9c9c9c;
+	background-color: #fafafa;
+	padding: 5px 15px;
+	font-size: 10pt;
+	font-family: 'Ubuntu', sans-serif;
+	position: relative;
+	word-wrap: break-word;
+	background-color: #444;
+	color: #9c9c9c;
 }
 
 .msg:hover {
-    background-color: #383838;
-    color: #9c9c9c;
+	background-color: #383838;
+	color: #9c9c9c;
 }
 
 .action {
-    color: rgb(117, 117, 117);
-    font-style: italic;
+	color: rgb(117, 117, 117);
+	font-style: italic;
 }
 
 .admin {
-    color: #828181;
-    cursor: pointer;
-    font-size: 11pt;
-    float: right;
-    margin-right: 5px;
+	color: #828181;
+	cursor: pointer;
+	font-size: 11pt;
+	float: right;
+	margin-right: 5px;
 }
 
 .mod {
-    border: 1px solid #636363;
-    padding: 3px 8px;
-    margin-right: 3px;
-    font-style: normal;
+	border: 1px solid #636363;
+	padding: 3px 8px;
+	margin-right: 3px;
+	font-style: normal;
 }
 
 .tabview {
-    float: right;
+	float: right;
 }
 
 .limited {
-    width: 50%;
+	width: 50%;
 }
 
 .timestamp {
-    color: #868686;
-    border: 1px solid #888888;
-    padding: 3px 8px;
+	color: #868686;
+	border: 1px solid #888888;
+	padding: 3px 8px;
 }
 
 .date-span {
-    background-color: #444;
-    padding: 0 10px;
-    color: #adadad;
+	background-color: #444;
+	padding: 0 10px;
+	color: #adadad;
 }
 
 .date-wrap {
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid #b7b7b7;
-    line-height: 0.1em;
-    margin: 10px 0 20px;
+	width: 100%;
+	text-align: center;
+	border-bottom: 1px solid #b7b7b7;
+	line-height: 0.1em;
+	margin: 10px 0 20px;
 }
