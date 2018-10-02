@@ -85,18 +85,22 @@ a:hover {
 }
 
 #messageInput {
-	background-color: #444;
-	color: #a7a7a7;
+	background-color: #333;
+	color: #ddd;
 }
-
+#ot {
+	color: whitesmoke;
+}
 input#messageInput {
 	width: 100%;
 	outline: none;
+	border: 1px solid #555;
+	color: whitesmoke;
 }
 
 strong {
 	cursor: pointer;
-	color: #888888;
+	color: #ddd;
 }
 
 .fixed {
@@ -107,13 +111,12 @@ strong {
 }
 
 .msg {
-	background-color: #fafafa;
+	background-color: #222;
 	padding: 5px 15px;
 	font-size: 10pt;
 	font-family: 'Ubuntu', sans-serif;
 	position: relative;
 	word-wrap: break-word;
-	background-color: #444;
 	color: #9c9c9c;
 }
 
@@ -151,9 +154,12 @@ strong {
 }
 
 .timestamp {
-	color: #868686;
-	border: 1px solid #888888;
+	display: inline-block;
 	padding: 3px 8px;
+	text-align: center;
+	color: #777;
+	border: 1px solid #555;
+	width: 100px;
 }
 
 .date-span {
@@ -168,4 +174,11 @@ strong {
 	border-bottom: 1px solid #b7b7b7;
 	line-height: 0.1em;
 	margin: 10px 0 20px;
+}
+
+.users {
+	color: #888;
+}
+.icon {
+	color: #ddd;
 }
