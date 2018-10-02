@@ -8,7 +8,9 @@ function f() {
 	var productionMode = false;
 	var pC = 0,
 		isBanned;
-	var tflg = false;
+	var th = document.cookie.match(/[=]\w+[;]/gi)[0];
+	var theme = th.substring(1, th.length - 1);
+	var tflg = (theme === 'dark' ? true : false);
 	var notify = new Audio('notify.mp3');
 
 	//this code disables the console in production mode, so that our debug messages don't affect user experience. It's a really clever script, and I'm really proud of it. - _iPhoenix_
@@ -17,6 +19,19 @@ function f() {
 			window.console[o] = (() => {});
 		});
 	})();
+
+	if (theme) {
+		document.getElementById('style').href = (theme === "dark" ? 'css/dark.css' : 'css/style.css');
+		var el = document.getElementsByClassName('button');
+		for (var i = 0; i < el.length; i++) {
+			if (theme === "dark") {
+				el[i].classList.add('is-dark');
+			}
+			else {
+				el[i].classList.remove('is-dark');
+			}
+		}
+	}
 
 	firebase.initializeApp({
 		apiKey: "AIzaSyCI8N2f4HGdG7KVtjoea-g4eCkxvQhLOQw",
@@ -32,7 +47,6 @@ function f() {
 	var msg = db.ref('messages'),
 		total = db.ref('global/total');
 	var myConnectionsRef, lastOnlineRef;
-	// console.re.log(userName);
 
 	var userSignedIn = function(user) {
 		$('#userSignedOut').hide();
@@ -87,9 +101,9 @@ function f() {
 			else {
 				el[i].classList.remove('is-dark');
 			}
-
 		}
-
+		var tx = ('theme=' + (tflg ? 'dark;' : 'light;'));
+		document.cookie = tx;
 	});
 
 	$(function() {
@@ -147,10 +161,10 @@ function f() {
 
 
 			msg.orderByChild('ts').limitToLast(30).on('child_added', function(d) {
-				console.re.log(db.ref(d.key) !== null ? true : false);
+				// console.re.log(db.ref(d.key) !== null ? true : false);
 				var val = d.val();
 				val.id = d.key;
-				console.re.log('event fired:' + d.key);
+				// console.re.log('event fired:' + d.key);
 
 				ctime = new Date(val.ts).toLocaleDateString();
 				if (new Date(lastMessage).toLocaleDateString() != ctime) {
@@ -172,9 +186,7 @@ function f() {
 				}
 
 				if (cleanse(val.msg).includes(auth.currentUser.displayName.substring(0, 3))) {
-					$('#' + (val.id)).css({
-						"background-color": "#ddd"
-					});
+					$('#' + (val.id)).addClass('mention');
 					notify.play();
 				}
 
