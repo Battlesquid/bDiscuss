@@ -16,8 +16,9 @@ function f() {
 		th = document.cookie.match(/[=]\w+[;]/gi)[0];
 		theme = th.substring(1, th.length - 1);
 		tflg = (theme === 'dark' ? true : false);
-	} else {
-		document.cookie = 'theme=light;';
+	}
+	else {
+		document.cookie = "theme=light; expires='Sun, 31, Dec, 9999 23:59:59 GMT';";
 	}
 
 	var notify = new Audio('notify.mp3');
@@ -111,7 +112,7 @@ function f() {
 				el[i].classList.remove('is-dark');
 			}
 		}
-		var tx = ('theme=' + (tflg ? 'dark;' : 'light;'));
+		var tx = ('theme=' + (tflg ? "dark; expires='Sun, 31, Dec, 9999 23:59:59 GMT';" : "light; expires='Sun, 31, Dec, 9999 23:59:59 GMT';"));
 		document.cookie = tx;
 	});
 
@@ -181,7 +182,7 @@ function f() {
 				}
 
 				if (!(val.msg.startsWith("/me"))) {
-					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<div class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</div> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
+					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<div class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</div> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>:" + cleanse(val.msg));
 				}
 
 				else {
