@@ -182,7 +182,7 @@ function f() {
 				}
 
 				if (!(val.msg.startsWith("/me"))) {
-					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<div class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</div> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>:" + cleanse(val.msg));
+					$('#messages').append("<div class='msg' id=" + val.id + ">" + "<div class='timestamp'>" + new Date(val.ts).toLocaleTimeString() + "</div> <strong id='user" + val.id + "' class='user" + val.id + "' title='" + val.un + "'>" + val.un + "</strong>: " + cleanse(val.msg));
 				}
 
 				else {
