@@ -242,7 +242,7 @@ function f() {
 							'ts': ftime
 						})
 						.then(function() {
-							fetch('https://discordapp.com/api/webhooks/506575516015394846/jjh64LYY-cNpF6mKC-ZGy0zt_agXnze6Vnw-BfdLDKHCQ4_Y8tGVIBD97hJ1VTK6-h00', {
+							fetch('https://discordapp.com/api/webhooks/506891355541209088/WLumlzwrZLy-SNbyk6GyxkiJ7cqPbxib9UBtCbMz1hGskyWfkyfQOi3nnA92oNI1t4ux', {
 								method: 'POST',
 								headers: {
 									'Content-Type': 'application/json'
