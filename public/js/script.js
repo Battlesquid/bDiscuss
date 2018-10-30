@@ -54,6 +54,8 @@ function f() {
 
 	var auth = firebase.auth();
 	var db = firebase.database();
+	var messaging = firebase.messaging();
+
 	var msg = db.ref('messages'),
 		total = db.ref('global/total');
 	var myConnectionsRef, lastOnlineRef;
@@ -118,7 +120,7 @@ function f() {
 
 	$(function() {
 		$("#messageInput").keypress(function(e) {
-			if (e.which == 13) {
+			if (e.which === 13) {
 				send();
 			}
 		});
@@ -150,6 +152,7 @@ function f() {
 			var r = /\s/gi;
 			$('#' + val.key.replace(r, '')).remove();
 		});
+
 		// parentConnections.on('child_changed', function(val) {
 		// 	console.re.log(val.val());
 		// 	val.val() ? $('#users').append("<div id='" + val.key + "'></div>") : $('#' + val.key).remove();
@@ -171,13 +174,12 @@ function f() {
 
 
 			msg.orderByChild('ts').limitToLast(30).on('child_added', function(d) {
-				// console.re.log(db.ref(d.key) !== null ? true : false);
+
 				var val = d.val();
 				val.id = d.key;
-				// console.re.log('event fired:' + d.key);
 
 				ctime = new Date(val.ts).toLocaleDateString();
-				if (new Date(lastMessage).toLocaleDateString() != ctime) {
+				if (new Date(lastMessage).toLocaleDateString() !== ctime) {
 					$('#messages').append("<h3 class='date-wrap'><span class='date-span'>" + new Date(val.ts).toLocaleDateString() + "</span></h3>");
 				}
 
@@ -233,11 +235,26 @@ function f() {
 					return d + 1;
 				}, function(err, commit, val) {
 					msgID = val.val();
+					var ftime = Date.now();
 					db.ref('messages/' + msgID).set({
-						'un': auth.currentUser.displayName,
-						'msg': message,
-						'ts': firebase.database.ServerValue.TIMESTAMP
-					});
+							'un': auth.currentUser.displayName,
+							'msg': message,
+							'ts': ftime
+						})
+						.then(function() {
+							fetch('https://discordapp.com/api/webhooks/506575516015394846/jjh64LYY-cNpF6mKC-ZGy0zt_agXnze6Vnw-BfdLDKHCQ4_Y8tGVIBD97hJ1VTK6-h00', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify({
+									"username": "bDiscuss",
+									"content": "[`" + (new Date(ftime)).toLocaleTimeString() + "`] **" + auth.currentUser.displayName + "**: " + message
+								})
+							});
+						});
+
+
 				});
 			}
 			messageInput.value = '';
